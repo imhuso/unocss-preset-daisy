@@ -1,4 +1,4 @@
-# unocss-preset-daisy-ui
+# imhuso/unocss-preset-daisy
 
 UnoCSS preset for daisyUI
 
