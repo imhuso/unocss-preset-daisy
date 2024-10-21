@@ -1,6 +1,6 @@
-# unocss-preset-daisyui
+# unocss-preset-daisy-ui
 
-> [UnoCSS](https://github.com/unocss/unocss) preset for [daisyUI](https://github.com/saadeghi/daisyui)
+UnoCSS preset for daisyUI
 
 [Checkout the demo!](https://unocss-preset-daisy.vercel.app/)
 
