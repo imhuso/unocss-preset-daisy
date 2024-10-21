@@ -1,6 +1,6 @@
 {
 	"name": "@imhuso/unocss-preset-daisy",
-	"version": "8.1.4",
+	"version": "8.1.5",
 	"description": "UnoCSS preset for daisyUI",
 	"scripts": {
 		"build": "vite build demo",
