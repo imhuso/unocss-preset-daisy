@@ -1,6 +1,6 @@
 {
 	"name": "unocss-preset-daisy",
-	"version": "8.0.1",
+	"version": "8.0.2",
 	"description": "UnoCSS preset for daisyUI",
 	"scripts": {
 		"build": "vite build demo",
@@ -26,7 +26,7 @@
 	},
 	"peerDependencies": {
 		"daisyui": "^4.10.5",
-		"unocss": "^0.59.4"
+		"unocss": "^0.62.4"
 	},
 	"devDependencies": {
 		"@iconify-json/octicon": "^1.2.1",
