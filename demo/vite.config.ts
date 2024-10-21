@@ -1,13 +1,18 @@
-import {defineConfig} from 'vite'
+import { defineConfig } from 'vite'
 // eslint-disable-next-line n/file-extension-in-import
 import unocss from 'unocss/vite'
-import {presetUno, presetIcons} from 'unocss'
-import {presetDaisy} from '../index.js'
+import { presetUno } from 'unocss'
+import { presetDaisy } from '../index'
 
 export default defineConfig({
 	plugins: [
 		unocss({
-			presets: [presetUno(), presetDaisy(), presetIcons()],
+			presets: [
+				presetUno(),
+				presetDaisy({
+					themes: true,
+				}),
+			],
 		}),
 	],
 })

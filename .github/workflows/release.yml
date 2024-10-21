@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: npm ci
+      - run: npm run test
+      - run: npm run coverage
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

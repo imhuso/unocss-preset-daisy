@@ -1,4 +1,4 @@
-# unocss-preset-daisy
+# unocss-preset-daisyui
 
 > [UnoCSS](https://github.com/unocss/unocss) preset for [daisyUI](https://github.com/saadeghi/daisyui)
 
@@ -7,7 +7,7 @@
 ## Installation
 
 ```sh
-npm install unocss daisyui unocss-preset-daisy
+npm install unocss daisyui unocss-preset-daisyui
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ npm install unocss daisyui unocss-preset-daisy
 import {defineConfig} from 'vite'
 import unocss from 'unocss/vite'
 import {presetUno} from 'unocss'
-import {presetDaisy} from 'unocss-preset-daisy'
+import {presetDaisy} from 'unocss-preset-daisyui'
 
 export default defineConfig({
 	plugins: [
@@ -42,7 +42,7 @@ import 'uno.css'
 import {defineConfig} from 'astro/config'
 import unocss from 'unocss/astro'
 import {presetUno} from 'unocss'
-import {presetDaisy} from 'unocss-preset-daisy'
+import {presetDaisy} from 'unocss-preset-daisyui'
 
 export default defineConfig({
 	integrations: [
@@ -61,7 +61,7 @@ To use UnoCSS with Nuxt, `@unocss/nuxt` must be installed as well.
 ```js
 import {defineNuxtConfig} from 'nuxt/config'
 import {presetUno} from 'unocss'
-import {presetDaisy} from 'unocss-preset-daisy'
+import {presetDaisy} from 'unocss-preset-daisyui'
 
 export default defineNuxtConfig({
 	modules: ['@unocss/nuxt'],
@@ -92,6 +92,16 @@ This preset accepts [the same config as daisyUI](https://daisyui.com/docs/config
 
 **This is not a full daisyUI port.** All daisyUI components/utilities should work but they may not work with some UnoCSS features:
 
-- [#14](https://github.com/kidonng/unocss-preset-daisy/issues/14): [variants](https://windicss.org/utilities/general/variants.html) do not work
+- [#14](https://github.com/imhuso/unocss-preset-daisy/issues/14): [variants](https://windicss.org/utilities/general/variants.html) do not work
 
 **Unused styles may be imported.** This is both due to lots of hacks being used and how UnoCSS works. However, the preset will try to figure out the minimum styles needed, thus the cost is trivial most of the time.
+
+## License
+
+MIT
+
+## Development
+
+### Testing
+
+To run tests:

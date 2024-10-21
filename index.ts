@@ -14,12 +14,13 @@ import utilitiesStyled from 'daisyui/dist/utilities-styled.js'
 import themes from 'daisyui/src/theming/themes.js'
 import colorFunctions from 'daisyui/src/theming/functions.js'
 import utilityClasses from 'daisyui/src/lib/utility-classes.js';
+
 const processor = postcss(autoprefixer)
 const process = (object: CssInJs) => processor.process(object, {parser: parse})
 
 const replacePrefix = (css: string) => css.replaceAll('--tw-', '--un-')
 
-const defaultOptions = {
+export const defaultOptions = {
 	styled: true,
 	themes: false as
 		| boolean
@@ -104,35 +105,36 @@ export const presetDaisy = (
 
 	if (options.base) {
 		preflights.unshift({
-			// eslint-disable-next-line @typescript-eslint/naming-convention
 			getCSS: () => replacePrefix(process(base).css),
 			layer: 'daisy-base',
 		})
 	}
 
-	colorFunctions.injectThemes(
-		theme => {
-			preflights.push({
-				// eslint-disable-next-line @typescript-eslint/naming-convention
-				getCSS: () => process(theme).css,
-				layer: 'daisy-themes',
-			})
-		},
-		// @ts-expect-error Return never
-		key => {
-			if (key === 'daisyui.themes') {
-				return options.themes
-			}
+	if (options.themes !== false) {
+		colorFunctions.injectThemes(
+			theme => {
+				preflights.push({
+					getCSS: () => process(theme).css,
+					layer: 'daisy-themes',
+				})
+			},
+			key => {
+				if (key === 'daisyui.themes') {
+					return options.themes
+				}
 
-			if (key === 'daisyui.darkTheme') {
-				return options.darkTheme
-			}
-		},
-		themes,
-	)
+				if (key === 'daisyui.darkTheme') {
+					return options.darkTheme
+				}
+
+				return undefined
+			},
+			themes,
+		)
+	}
 	
 	return {
-		name: 'unocss-preset-daisy',
+		name: 'unocss-preset-daisyui',
 		preflights,
 		theme: {
 			colors: {
@@ -140,10 +142,7 @@ export const presetDaisy = (
 					Object.entries(colors)
 						.filter(
 							([color]) =>
-								// Already in @unocss/preset-mini
-								// https://github.com/unocss/unocss/blob/0f7efcba592e71d81fbb295332b27e6894a0b4fa/packages/preset-mini/src/_theme/colors.ts#L11-L12
 								!['transparent', 'current'].includes(color)
-								// Added below
 								&& !color.startsWith('base'),
 						)
 						.map(([color, value]) => [camelCase(color), value]),
@@ -168,5 +167,14 @@ export const presetDaisy = (
 					},
 				] satisfies DynamicRule,
 		),
+		variants: [
+			(matcher: string) => {
+				if (!matcher.startsWith('theme-')) return matcher
+				return {
+					matcher: matcher.slice(6),
+					selector: (s: string) => `[data-theme~="${matcher.slice(6)}"] ${s}`,
+				}
+			},
+		],
 	}
 }
