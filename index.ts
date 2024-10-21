@@ -134,7 +134,7 @@ export const presetDaisy = (
 	}
 	
 	return {
-		name: 'unocss-preset-daisyui',
+		name: 'unocss-preset-daisy',
 		preflights,
 		theme: {
 			colors: {

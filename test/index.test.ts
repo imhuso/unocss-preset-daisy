@@ -5,7 +5,7 @@ describe('presetDaisy', () => {
   it('should return a preset object with correct structure', () => {
     const preset = presetDaisy()
     expect(preset).toBeTypeOf('object')
-    expect(preset.name).toBe('unocss-preset-daisyui')
+    expect(preset.name).toBe('unocss-preset-daisy')
     expect(preset.preflights).toBeInstanceOf(Array)
     expect(preset.theme).toBeTypeOf('object')
     expect(preset.rules).toBeInstanceOf(Array)
@@ -13,7 +13,7 @@ describe('presetDaisy', () => {
 
   it('should use default options when no options are provided', () => {
     const preset = presetDaisy()
-    expect(preset.name).toBe('unocss-preset-daisyui')
+    expect(preset.name).toBe('unocss-preset-daisy')
     if (preset.theme && typeof preset.theme === 'object') {
       expect(preset.theme).toHaveProperty('colors')
       if ('colors' in preset.theme) {
@@ -29,7 +29,7 @@ describe('presetDaisy', () => {
       base: false,
     }
     const preset = presetDaisy(customOptions)
-    expect(preset.name).toBe('unocss-preset-daisyui')
+    expect(preset.name).toBe('unocss-preset-daisy')
     // Add more specific checks here based on the actual implementation
     // For example, check if styled and base options are correctly applied
   })

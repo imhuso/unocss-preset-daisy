@@ -3,8 +3,8 @@
 	"version": "8.1.5",
 	"description": "UnoCSS preset for daisyUI",
 	"scripts": {
-		"build": "vite build demo",
-		"prepare": "tsc",
+		"build": "tsc -p tsconfig.build.json && vite build demo",
+		"prepare": "tsc -p tsconfig.build.json",
 		"preview": "vite preview demo --host",
 		"start": "vite demo --host",
 		"release": "bumpp package.json --commit --push --tag && pnpm publish --access public",
@@ -14,10 +14,18 @@
 	"license": "MIT",
 	"author": "imhuso <imhuso@outlook.com>",
 	"type": "module",
-	"exports": "./index.js",
+	"exports": {
+		".": {
+			"import": "./distribution/index.js",
+			"require": "./distribution/index.js",
+			"types": "./distribution/index.d.ts"
+		}
+	},
+	"main": "./distribution/index.js",
+	"module": "./distribution/index.js",
+	"types": "./distribution/index.d.ts",
 	"files": [
-		"index.js",
-		"index.d.ts"
+		"distribution"
 	],
 	"dependencies": {
 		"autoprefixer": "^10.4.20",
