@@ -1,6 +1,6 @@
 {
 	"name": "unocss-preset-daisy",
-	"version": "8.0.2",
+	"version": "1.0.0",
 	"description": "UnoCSS preset for daisyUI",
 	"scripts": {
 		"build": "vite build demo",
@@ -8,9 +8,9 @@
 		"preview": "vite preview demo --host",
 		"start": "vite demo --host"
 	},
-	"repository": "kidonng/unocss-preset-daisy",
+	"repository": "imhuso/unocss-preset-daisy",
 	"license": "MIT",
-	"author": "Kid <hi@xuann.wang> (https://xuann.wang/)",
+	"author": "imhuso",
 	"type": "module",
 	"exports": "./index.js",
 	"files": [
