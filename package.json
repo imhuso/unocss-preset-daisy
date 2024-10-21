@@ -1,13 +1,13 @@
 {
-	"name": "unocss-preset-daisy-ui",
-	"version": "8.1.3",
+	"name": "@imhuso/unocss-preset-daisy",
+	"version": "8.1.4",
 	"description": "UnoCSS preset for daisyUI",
 	"scripts": {
 		"build": "vite build demo",
 		"prepare": "tsc",
 		"preview": "vite preview demo --host",
 		"start": "vite demo --host",
-		"release": "bumpp package.json --commit --push --tag && pnpm publish",
+		"release": "bumpp package.json --commit --push --tag && pnpm publish --access public",
 		"test": "vitest watch"
 	},
 	"repository": "imhuso/unocss-preset-daisy",
