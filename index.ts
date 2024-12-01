@@ -1,7 +1,7 @@
 import postcss, {type Rule, type ChildNode} from 'postcss'
 import autoprefixer from 'autoprefixer'
 import {parse, type CssInJs} from 'postcss-js'
-import {tokenize, type ClassToken} from 'parsel-js'
+import * as cssTokenizer from 'css-selector-tokenizer'
 import type {Preset, DynamicRule, Preflight} from 'unocss'
 import camelCase from 'camelcase'
 import colors from 'daisyui/src/theming/index.js'
@@ -14,6 +14,28 @@ import utilitiesStyled from 'daisyui/dist/utilities-styled.js'
 import themes from 'daisyui/src/theming/themes.js'
 import colorFunctions from 'daisyui/src/theming/functions.js'
 import utilityClasses from 'daisyui/src/lib/utility-classes.js';
+
+// 添加模块声明
+declare module 'css-selector-tokenizer' {
+    export interface Token {
+        type: string;
+        name: string;
+        content?: string;
+        value?: string;
+    }
+
+    export interface Selector {
+        type: 'selector';
+        nodes: Token[];
+    }
+
+    export interface Selectors {
+        type: 'selectors';
+        nodes: Selector[];
+    }
+
+    export function parse(selector: string): Selectors;
+}
 
 const processor = postcss(autoprefixer)
 const process = (object: CssInJs) => processor.process(object, {parser: parse})
@@ -70,43 +92,67 @@ export const presetDaisy = (
 
 	for (const node of nodes) {
 		const selector = node.selectors[0]!
-		const tokens = tokenize(selector)
-		const token = tokens[0]!
 		let base = ''
 
-		if (token.type === 'class') {
-			// Resolve conflicts with @unocss/preset-wind link variant
-			// .link-* -> .link
+		// 使用 css-selector-tokenizer 解析选择器
+		const tokens = cssTokenizer.parse(selector)
+		const firstSelector = tokens.nodes[0]
+		const firstToken = firstSelector?.nodes[0]
+
+		if (firstToken?.type === 'class') {
+			// 处理类选择器
 			if (selector.startsWith('.link-')) {
 				base = 'link'
 			} else if (selector.startsWith('.modal-open')) {
 				base = 'modal'
 			} else {
-				base = token.name
+				base = firstToken.name
 			}
-		} else if (token.type === 'pseudo-class' && token.name === 'where') {
-			// :where(.foo) -> .foo
-			base = (tokenize(token.argument!)[0] as ClassToken).name
-		} else if (['[dir="rtl"]', ':root'].includes(token.content)) {
-			// Special case for https://github.com/saadeghi/daisyui/blob/6db14181733915278621d9b2d128b0af43c52323/src/components/unstyled/modal.css#LL28C1-L28C89
-			base = tokens[1]!.content.includes('.modal-open')
-				? 'modal'
-				// Skip prefixes
-				: (tokens[2] as ClassToken).name
+		} else if (firstToken?.type === 'pseudo' && firstToken.name === 'where') {
+			// 处理 :where() 伪类
+			if (firstToken.content) {
+				const innerTokens = cssTokenizer.parse(firstToken.content).nodes[0]?.nodes || []
+				const classToken = innerTokens.find(t => t.type === 'class')
+				if (classToken) {
+					base = classToken.name
+				}
+			}
+		} else if (firstToken?.type === 'attribute' && firstToken.name === 'dir') {
+			// 处理 [dir="rtl"] 选择器
+			const classToken = firstSelector?.nodes.find(t => t.type === 'class')
+			if (classToken) {
+				if (selector.includes('.modal-open')) {
+					base = 'modal'
+				} else {
+					base = classToken.name
+				}
+			}
+		} else if (firstToken?.type === 'tag' && firstToken.name === 'root') {
+			// 处理 :root 选择器
+			const classToken = firstSelector?.nodes.find(t => t.type === 'class')
+			if (classToken) {
+				if (selector.includes('.modal-open')) {
+					base = 'modal'
+				} else {
+					base = classToken.name
+				}
+			}
 		}
 
-		rules.set(base, (rules.get(base) ?? '') + String(node) + '\n')
+		if (base) {
+			rules.set(base, (rules.get(base) ?? '') + String(node) + '\n')
+		}
 	}
 
 	const preflights: Preflight[] = Object.entries(specialRules).map(([key, value]) => ({
 		getCSS: () => value.join('\n'),
-		layer: `daisy-${key}}`,
+		layer: `daisy-${key}`,
 	}));
 
 	if (options.base) {
 		preflights.unshift({
 			getCSS: () => replacePrefix(process(base).css),
-			layer: 'daisy-base',
+				layer: 'daisy-base',
 		})
 	}
 
@@ -178,3 +224,4 @@ export const presetDaisy = (
 		],
 	}
 }
+
